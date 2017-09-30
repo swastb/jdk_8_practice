@@ -2,6 +2,7 @@ package org.swastika.jdk_8_poc;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,8 +19,19 @@ public class StreamExample {
 		System.out.println(getArtistMemberCount(Stream.of(new Artist("A", "AP", true, Arrays.asList("A", "AA", "AAA")),
 				new Artist("b", "BA", true, Arrays.asList("B")))));
 		System.out.println(countTheLowerCase("Swastika Basu"));
-		System.out.println(getStringWithMaxLowerCase(Stream.of("SwaSTika","Swastika","Swas")));
-		
+		System.out.println(getStringWithMaxLowerCase(Stream.of("SwaSTika", "Swastika", "Swas")));
+
+		System.out.println(averageNumberOfTracks(Stream.of(new Artist("A", "AP", true, Arrays.asList("A", "AA", "AAA")),
+				new Artist("b", "BA", true, Arrays.asList("B", "C")))));
+
+		System.out
+				.println(divideBasedOnPopularity(Stream.of(new Artist("A", "AP", false, Arrays.asList("A", "AA", "AAA")),
+						new Artist("b", "BA", true, Arrays.asList("B", "C")))));
+
+	}
+
+	public static Map<Boolean, List<Artist>> divideBasedOnPopularity(Stream<Artist> artistList) {
+		return artistList.collect(Collectors.partitioningBy(artist -> artist.isFamous()));
 	}
 
 	public static void addUp(Stream<Integer> intStream) {
@@ -43,6 +55,10 @@ public class StreamExample {
 	public static String getStringWithMaxLowerCase(Stream<String> names) {
 		return names.max((s1, s2) -> Long.compare(countTheLowerCase(s1), countTheLowerCase(s2))).get();
 		// return "";
+	}
+
+	public static double averageNumberOfTracks(Stream<Artist> artists) {
+		return artists.collect(Collectors.averagingInt(artist -> artist.getMembers().size()));
 	}
 }
 
